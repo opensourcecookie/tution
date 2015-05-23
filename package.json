@@ -1,0 +1,31 @@
+{
+  "name": "digital_library",
+  "version": "0.0.1",
+  "description": "test",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hapi"
+  ],
+  "author": "shashank baluni",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^0.9.0",
+    "bcrypt-nodejs": "0.0.3",
+    "boom": "^2.7.2",
+    "good": "^5.1.2",
+    "good-console": "^4.1.0",
+    "hapi": "^8.4.0",
+    "hapi-auth-basic": "^2.0.0",
+    "hapi-auth-cookie": "^2.2.0",
+    "joi": "^6.4.1",
+    "lout": "^6.2.2",
+    "mongoose": "^4.0.1",
+    "mysql": "^2.6.2",
+    "node-mysql": "^0.4.2",
+    "sequelize": "^2.1.0",
+    "squel": "^3.10.0"
+  }
+}

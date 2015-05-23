@@ -1,0 +1,48 @@
+<html><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>tution</title>
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		
+			
+	</head>
+	<body>
+		<div style="max-width:30%;text-align:center;margin:15% auto;">
+			<form method="post" action="/register">
+			<div class="form-group">
+			    <label for="firstName">First name</label>
+			    <input type="text" class="form-control" name="firstName" id="firstName" placeholder="First name">
+			  </div>
+			  <div class="form-group">
+			    <label for="lastName">Last name</label>
+			    <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Last name">
+			  </div>
+			  <div class="form-group">
+			    <label for="password">Password</label>
+			    <input type="password" class="form-control" name="password" id="password" placeholder="Enter password">
+			  </div>
+			  <div class="form-group">
+			    <label for="mobile">Mobile</label>
+			    <input type="number" class="form-control" name="mobile" id="mobile" placeholder="Mobile number">
+			  </div>
+			  <div class="form-group">
+			    <label for="type">Mobile</label>
+			    <select id="type" name="type" class="form-control">
+				  <option value="ADMIN">Admin</option>
+				  <option value="STUDENT">Teacher</option>
+				  <option value="TEACHER">Student</option>
+				</select>
+			  </div>
+			  <div class="form-group">
+			    <label for="address">Address</label>
+			    <textarea class="form-control" rows="3" name="address" id="address"></textarea>
+			  </div>
+			<button type="submit" class="btn btn-default">Submit</button>
+		</form>
+		</div>
+	</body>
+</html>
