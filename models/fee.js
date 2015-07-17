@@ -18,5 +18,5 @@ module.exports = function(sequelize, DataTypes){
       		allowNull: false
 		}
 	}
-	return sequelize.define('fee', columns);
+	return sequelize.define('Fee', columns);
 }

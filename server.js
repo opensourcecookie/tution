@@ -5,13 +5,39 @@ var user = require('./controllers/user');
 var config = require('./config');
 var async = require('async');
 
-var startServer = function(){
-	var server = new Hapi.Server();
-	server.connection(config.server);
+var server = new Hapi.Server();
+server.connection(config.server);
+
+server.startServer = function(callback){
 	async.series(
-		[
+		[	
 			function(cb){
-				server.register(require('hapi-auth-cookie'), function (err) {
+				models.sequelize.sync().then(function () {
+					cb();
+				}, function(error){
+					cb(error);
+				});
+			},
+			function(cb){
+				//register good module
+				server.register(
+				[
+					{
+						register: require('hapi-auth-cookie')
+					},
+					{
+						register: Good,
+						options: {
+							reporters: [{
+								reporter: require('good-console'),
+								args: [{log: '*', response: '*'}]
+							}]
+						}
+					},
+					{
+						register: require('lout')
+					}
+				],  function (err) {
 					if(err){
 						return cb(err);
 					}
@@ -24,50 +50,28 @@ var startServer = function(){
 				    });
 				    cb();
     			});
-			},
-
-			function(cb){
-				//register good module
-				server.register([{
-					register: Good,
-					options: {
-						reporters: [{
-							reporter: require('good-console'),
-							args: [{log: '*', response: '*'}]
-						}]
-					}
-				},
-
-				{
-					register: require('lout')
-				}], cb);
 
 			},
 
 			function(cb){
-				server.route({
-				    method: 'GET',
-				    path: '/{param*}',
-				    handler: {
-				        directory: {
-				            path: 'public',
-				            index: true 
-				        }
-				    }
-				});
-
 				//add routes
 				server.route(require('./routes'));
 				cb();
 			},
 
 			function(cb){
-				server.start(cb);
+				if(!module.parent){
+					return server.start(cb);
+				}
+				cb();
 			}
 		], function(err){
 			if(err){
 				console.log(err);
 				process.exit(1);
+			}else if(typeof callback === 'function'){
+				callback();
+				console.log(server.info);
 			}else{
 				console.log(server.info);
 			}
@@ -75,13 +79,13 @@ var startServer = function(){
 
 };
 
-models.sequelize.sync().then(function () {
-  startServer();
-}, function(error){
-	throw error;
-});
+(function(){
+	if(!module.parent){
+		server.startServer();	
+	}
+})();
 
-
+module.exports = server;
 
 
 

@@ -11,7 +11,7 @@ module.exports = function(Sequelize, DataTypes){
       allowNull: false
     },
     password:{
-      type: DataTypes.CHAR(10),
+      type: DataTypes.CHAR(250),
       allowNull: false
     },
     firstName: {
@@ -32,6 +32,15 @@ module.exports = function(Sequelize, DataTypes){
     }
 };
 
-return Sequelize.define('User', columns);
+var options = {
+  classMethods: {
+      associate: function(models) {
+        User.hasMany(models.Fee)
+      }
+    }
+}
 
+var User = Sequelize.define('User', columns, options);
+
+return User;
 }

@@ -19,5 +19,10 @@ module.exports = {
 		    min: 0,
 		    idle: 10000
 		}
+	},
+	student: {
+		fee: {
+			amount: 800
+		}
 	}
 }

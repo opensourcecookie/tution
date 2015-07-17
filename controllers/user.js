@@ -1,4 +1,4 @@
-var User = require('../models').User;
+var models = require('../models');
 var bcrypt = require('bcrypt-nodejs');
 var Boom = require('boom');
 var async = require('async');
@@ -13,7 +13,7 @@ module.exports = {
 			},
 
 			function validatePassword(hash, cb) {
-				User.findOrCreate({
+				models.User.findOrCreate({
 				where: {
 					mobile: request.payload.mobile
 				}, 
@@ -41,7 +41,7 @@ module.exports = {
 	},
 
 	validate: function(session, callback){
-		User.findOne({
+		models.User.findOne({
 			where : {
 				mobile: session.mobile,
 				id: session.id
@@ -63,7 +63,7 @@ module.exports = {
 			return reply('already logged in');
 		}
 
-		User.findOne({
+		models.User.findOne({
 			where:{
 				mobile: request.payload.mobile
 			}
@@ -77,10 +77,52 @@ module.exports = {
 					reply(Boom.unauthorized('invalid password'));
 				}else{
 					request.auth.session.set(user.dataValues);
-					reply.redirect('/dashboard')
+					//reply.redirect('/dashboard');
+					delete user.password;
+					reply({status: true, user: user});
 				}
 			});
 		}, function(err){
+			reply(Boom.serverTimeout('unavailable', err));
+		});
+	},
+
+	logout: function(request, reply){
+		request.auth.session.clear();
+    	return reply.redirect('/');
+	},
+
+	payFee: function(request, reply){
+		
+		models.Fee.findOrCreate({
+			where: {
+				userId	: request.auth.credentials.id,
+				month	: request.payload.month
+			},
+			defaults: {
+				amount	: request.payload.amount,
+				id 		: request.credentials.id,
+				month 	: request.payload.month
+			}
+		})
+		.then(function (feeDetail) {
+			reply(feeDetail);
+		})
+		.catch(function (err) {
+			reply(Boom.serverTimeout('unavailable', err));
+		});
+	},	
+
+	listFee: function(request, reply){
+		models.Fee.find({
+			where: {
+				userId: request.auth.credentials.id
+			}
+		})
+		.then(function (feeDetail) {
+			reply(feeDetail);
+		})
+		.catch(function (err) {
 			reply(Boom.serverTimeout('unavailable', err));
 		});
 	}
